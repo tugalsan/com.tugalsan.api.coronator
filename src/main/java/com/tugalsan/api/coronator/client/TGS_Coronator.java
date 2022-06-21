@@ -43,33 +43,32 @@ public class TGS_Coronator<T> {
 
     //FETCHER
     public T coronate() {
-        System.out.println("pack.size(): " + pack.size());
+//        System.out.println("pack.size(): " + pack.size());
         var i = 0;
         for (var comp : pack) {
-            System.out.println("for i:" + i++ + ", bufferedValue: " + bufferedValue);
-
+//            System.out.println("for i:" + i++ + ", bufferedValue: " + bufferedValue);
             var setter = comp.value0;
             var validator = comp.value1;
             var validatorIsStopper = comp.value2;
-            System.out.println("setter:" + (setter == null ? "null" : "exists") + ", validator:" + (validator == null ? "null" : "exists") + ", validatorIsStopper:" + (validatorIsStopper == null ? "null" : "exists"));
+//            System.out.println("setter:" + (setter == null ? "null" : "exists") + ", validator:" + (validator == null ? "null" : "exists") + ", validatorIsStopper:" + (validatorIsStopper == null ? "null" : "exists"));
             if (validator == null) {
-                System.out.println("validator == null, set");
+//                System.out.println("validator == null, set");
                 bufferedValue = setter.compile(bufferedValue);
                 continue;
             }
             if (!validator.validate(bufferedValue)) {
-                System.out.println("!validator.validate(bufferedValue)");
+//                System.out.println("!validator.validate(bufferedValue)");
                 continue;
             }
             if (setter != null) {
-                System.out.println("setter != null");
+//                System.out.println("setter != null");
                 bufferedValue = setter.compile(bufferedValue);
             }
             if (validatorIsStopper) {
-                System.out.println("validatorIsStopper == true");
+//                System.out.println("validatorIsStopper == true");
                 return bufferedValue;
             }
-            System.out.println("fin");
+//            System.out.println("fin");
         }
         return bufferedValue;
     }
