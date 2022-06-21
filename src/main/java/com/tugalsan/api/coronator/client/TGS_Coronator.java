@@ -27,45 +27,49 @@ public class TGS_Coronator<T> {
     }
 
     public TGS_Coronator<T> coronateIf(TGS_ValidatorType1<T> validate, TGS_CompilerType1<T, T> val) {
-        if (validate.validate(bufferedValue)) {
-            pack.add(new TGS_Pack3(null, validate, true));
-        }
+        pack.add(new TGS_Pack3(null, validate, true));
         return this;
     }
 
     public TGS_Coronator<T> anointIf(TGS_ValidatorType1<T> validate, TGS_CompilerType1<T, T> val) {
-        if (validate.validate(bufferedValue)) {
-            pack.add(new TGS_Pack3(val, validate, false));
-        }
+        pack.add(new TGS_Pack3(val, validate, false));
         return this;
     }
 
     public TGS_Coronator<T> anointAndCoronateIf(TGS_ValidatorType1<T> validate, TGS_CompilerType1<T, T> val) {
-        if (validate.validate(bufferedValue)) {
-            pack.add(new TGS_Pack3(val, validate, true));
-        }
+        pack.add(new TGS_Pack3(val, validate, true));
         return this;
     }
 
     //FETCHER
     public T coronate() {
+        System.out.println("pack.size(): " + pack.size());
+        var i = 0;
         for (var comp : pack) {
+            System.out.println("for i:" + i++ + ", bufferedValue: " + bufferedValue);
+
             var setter = comp.value0;
             var validator = comp.value1;
             var validatorIsStopper = comp.value2;
+            System.out.println("setter:" + (setter == null ? "null" : "exists") + ", validator:" + (validator == null ? "null" : "exists") + ", validatorIsStopper:" + (validatorIsStopper == null ? "null" : "exists"));
             if (validator == null) {
+                System.out.println("validator == null, set");
                 bufferedValue = setter.compile(bufferedValue);
                 continue;
             }
             if (!validator.validate(bufferedValue)) {
+                System.out.println("!validator.validate(bufferedValue)");
                 continue;
             }
             if (setter != null) {
+                System.out.println("setter != null");
                 bufferedValue = setter.compile(bufferedValue);
             }
             if (validatorIsStopper) {
+                System.out.println("validatorIsStopper == true");
                 return bufferedValue;
             }
+            System.out.println("fin");
         }
         return bufferedValue;
     }
