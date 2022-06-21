@@ -14,7 +14,7 @@ public class TGS_Coronator<T> {
         bufferedValue = initVal;
     }
 
-    public static <T> TGS_Coronator of(T initialValue) {
+    public static <T> TGS_Coronator<T> of(T initialValue) {
         return new TGS_Coronator(initialValue);
     }
 
