@@ -19,7 +19,7 @@ public class TGS_Coronator<T> {
     }
 
     //LOADERS
-    private List<TGS_Pack3<TGS_CompilerType1<T, T>, TGS_ValidatorType1, /*is it stopper*/ Boolean>> pack = new ArrayList();
+    private List<TGS_Pack3<TGS_CompilerType1<T, T>, TGS_ValidatorType1<T>, /*is it stopper*/ Boolean>> pack = new ArrayList();
 
     public TGS_Coronator<T> anoint(TGS_CompilerType1<T, T> val) {
         pack.add(new TGS_Pack3(val, null, null));
