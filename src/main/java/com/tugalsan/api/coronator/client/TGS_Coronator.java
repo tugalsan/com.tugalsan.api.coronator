@@ -18,6 +18,22 @@ public class TGS_Coronator<T> {
         return new TGS_Coronator(initialValue);
     }
 
+    public static TGS_Coronator<String> ofStr() {
+        return new TGS_Coronator(null);
+    }
+
+    public static TGS_Coronator<Long> ofLng() {
+        return new TGS_Coronator(null);
+    }
+
+    public static TGS_Coronator<Integer> ofInt() {
+        return new TGS_Coronator(null);
+    }
+
+    public static TGS_Coronator<Double> ofDbl() {
+        return new TGS_Coronator(null);
+    }
+
     //LOADERS
     private List<TGS_Pack3<TGS_CompilerType1<T, T>, TGS_ValidatorType1<T>, /*is it stopper*/ Boolean>> pack = new ArrayList();
 
