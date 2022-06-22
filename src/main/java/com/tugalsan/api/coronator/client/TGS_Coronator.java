@@ -67,7 +67,7 @@ public class TGS_Coronator<T> {
             var validator = comp.value1;
             var validatorIsStopper = comp.value2;
 //            System.out.println("setter:" + (setter == null ? "null" : "exists") + ", validator:" + (validator == null ? "null" : "exists") + ", validatorIsStopper:" + (validatorIsStopper == null ? "null" : "exists"));
-            if (validator == null) {
+            if (validator == null || bufferedValue == null) {
 //                System.out.println("validator == null, set");
                 bufferedValue = setter.compile(bufferedValue);
                 continue;
