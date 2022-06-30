@@ -18,6 +18,10 @@ public class TGS_Coronator<T> {
         return new TGS_Coronator(initialValue);
     }
 
+    public static <T> TGS_Coronator<T> ofNull(T exampleValue) {
+        return new TGS_Coronator(exampleValue).anoint(val -> null);
+    }
+
     public static TGS_Coronator<String> ofStr() {
         return new TGS_Coronator(null);
     }
