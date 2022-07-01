@@ -64,7 +64,7 @@ public class TGS_Coronator<T> {
     //FETCHER
     public T coronate() {
 //        System.out.println("pack.size(): " + pack.size());
-        var i = 0;
+//        var i = 0;
         for (var comp : pack) {
 //            System.out.println("for i:" + i++ + ", bufferedValue: " + bufferedValue);
             var setter = comp.value0;
@@ -76,7 +76,7 @@ public class TGS_Coronator<T> {
                 bufferedValue = setter.compile(bufferedValue);
                 continue;
             }
-            if (bufferedValue == null || !validator.validate(bufferedValue)) {
+            if (!validator.validate(bufferedValue)) {
 //                System.out.println("!validator.validate(bufferedValue)");
                 continue;
             }
