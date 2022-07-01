@@ -14,12 +14,12 @@ public class TGS_Coronator<T> {
         bufferedValue = initVal;
     }
 
-    public static <T> TGS_Coronator<T> of(T initialValue) {
-        return new TGS_Coronator(initialValue);
+    public static <T> TGS_Coronator<T> of(Class<T> clazz) {
+        return new TGS_Coronator(null);
     }
 
-    public static <T> TGS_Coronator<T> ofNull(T exampleValue) {
-        return new TGS_Coronator(exampleValue).anoint(val -> null);
+    public static <T> TGS_Coronator<T> of(T initialValue) {
+        return new TGS_Coronator(initialValue);
     }
 
     public static TGS_Coronator<String> ofStr() {
