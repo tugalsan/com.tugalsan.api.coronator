@@ -46,8 +46,8 @@ public class TGS_Coronator<T> {
         SKIPPER, STOPPER, EXCEPTION_HANDLER
     }
 
-    public TGS_Coronator<T> onException(TGS_CompilerType2<T, T, Exception> val_e) {
-        pack.add(new TGS_Pack3(val_e, null, Type.EXCEPTION_HANDLER));
+    public TGS_Coronator<T> onException(TGS_CompilerType1<T, T> val) {
+        pack.add(new TGS_Pack3(val, null, Type.EXCEPTION_HANDLER));
         return this;
     }
 
