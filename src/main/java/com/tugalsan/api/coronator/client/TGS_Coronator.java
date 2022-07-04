@@ -2,6 +2,7 @@ package com.tugalsan.api.coronator.client;
 
 import com.tugalsan.api.compiler.client.*;
 import com.tugalsan.api.pack.client.*;
+import com.tugalsan.api.unsafe.client.*;
 import com.tugalsan.api.validator.client.*;
 import java.util.*;
 
@@ -39,25 +40,34 @@ public class TGS_Coronator<T> {
     }
 
     //LOADERS
-    private List<TGS_Pack3<TGS_CompilerType1<T, T>, TGS_ValidatorType1<T>, /*is it stopper*/ Boolean>> pack = new ArrayList();
+    private List<TGS_Pack3<TGS_CompilerType1<T, T>, TGS_ValidatorType1<T>, Type>> pack = new ArrayList();
+
+    private enum Type {
+        SKIPPER, STOPPER, EXCEPTION_HANDLER
+    }
+
+    public TGS_Coronator<T> onException(TGS_CompilerType2<T, T, Exception> val_e) {
+        pack.add(new TGS_Pack3(val_e, null, Type.EXCEPTION_HANDLER));
+        return this;
+    }
 
     public TGS_Coronator<T> anoint(TGS_CompilerType1<T, T> val) {
-        pack.add(new TGS_Pack3(val, null, null));
+        pack.add(new TGS_Pack3(val, null, Type.SKIPPER));
         return this;
     }
 
     public TGS_Coronator<T> coronateIf(TGS_ValidatorType1<T> validate, TGS_CompilerType1<T, T> val) {
-        pack.add(new TGS_Pack3(null, validate, true));
+        pack.add(new TGS_Pack3(null, validate, Type.STOPPER));
         return this;
     }
 
     public TGS_Coronator<T> anointIf(TGS_ValidatorType1<T> validate, TGS_CompilerType1<T, T> val) {
-        pack.add(new TGS_Pack3(val, validate, false));
+        pack.add(new TGS_Pack3(val, validate, Type.SKIPPER));
         return this;
     }
 
     public TGS_Coronator<T> anointAndCoronateIf(TGS_ValidatorType1<T> validate, TGS_CompilerType1<T, T> val) {
-        pack.add(new TGS_Pack3(val, validate, true));
+        pack.add(new TGS_Pack3(val, validate, Type.STOPPER));
         return this;
     }
 
@@ -65,32 +75,44 @@ public class TGS_Coronator<T> {
     public T coronate() {
 //        System.out.println("pack.size(): " + pack.size());
 //        var i = 0;
-        for (var comp : pack) {
+        TGS_CompilerType1<T, T> exceptionHandler = null;
+        try {
+            for (var comp : pack) {
 //            System.out.println("for i:" + i++ + ", bufferedValue: " + bufferedValue);
-            var setter = comp.value0;
-            var validator = comp.value1;
-            var validatorIsStopper = comp.value2;
+                var setter = comp.value0;
+                var type = comp.value2;
+                if (type == Type.EXCEPTION_HANDLER) {
+                    exceptionHandler = setter;
+                    continue;
+                }
+                var validator = comp.value1;
 //            System.out.println("setter:" + (setter == null ? "null" : "exists") + ", validator:" + (validator == null ? "null" : "exists") + ", validatorIsStopper:" + (validatorIsStopper == null ? "null" : "exists"));
-            if (validator == null) {
+                if (validator == null) {
 //                System.out.println("validator == null, set");
-                bufferedValue = setter.compile(bufferedValue);
-                continue;
-            }
-            if (!validator.validate(bufferedValue)) {
+                    bufferedValue = setter.compile(bufferedValue);
+                    continue;
+                }
+                if (!validator.validate(bufferedValue)) {
 //                System.out.println("!validator.validate(bufferedValue)");
-                continue;
-            }
-            if (setter != null) {
+                    continue;
+                }
+                if (setter != null) {
 //                System.out.println("setter != null");
-                bufferedValue = setter.compile(bufferedValue);
-            }
-            if (validatorIsStopper) {
+                    bufferedValue = setter.compile(bufferedValue);
+                }
+                if (type == Type.STOPPER) {
 //                System.out.println("validatorIsStopper == true");
-                return bufferedValue;
-            }
+                    return bufferedValue;
+                }
 //            System.out.println("fin");
+            }
+            return bufferedValue;
+        } catch (Exception e) {
+            if (exceptionHandler != null) {
+                return exceptionHandler.compile(bufferedValue);
+            }
+            return TGS_UnSafe.catchMeIfUCanReturns(e);
         }
-        return bufferedValue;
     }
 
 }
