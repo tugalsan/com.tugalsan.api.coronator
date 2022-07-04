@@ -43,12 +43,7 @@ public class TGS_Coronator<T> {
     private List<TGS_Pack3<TGS_CompilerType1<T, T>, TGS_ValidatorType1<T>, Type>> pack = new ArrayList();
 
     private enum Type {
-        SKIPPER, STOPPER, EXCEPTION_HANDLER
-    }
-
-    public TGS_Coronator<T> onException(TGS_CompilerType1<T, T> val) {
-        pack.add(new TGS_Pack3(val, null, Type.EXCEPTION_HANDLER));
-        return this;
+        SKIPPER, STOPPER
     }
 
     public TGS_Coronator<T> anoint(TGS_CompilerType1<T, T> val) {
@@ -71,48 +66,41 @@ public class TGS_Coronator<T> {
         return this;
     }
 
-    //FETCHER
+    //EXCEPTION HANDLING
+    public TGS_Pack2<T, Exception> coronateWithException() {
+        return TGS_UnSafe.compile(() -> TGS_Pack2.of(coronate(), null), e -> TGS_Pack2.of(null, e));
+    }
+
+//FETCHER
     public T coronate() {
 //        System.out.println("pack.size(): " + pack.size());
 //        var i = 0;
         TGS_CompilerType1<T, T> exceptionHandler = null;
-        try {
-            for (var comp : pack) {
+        for (var comp : pack) {
 //            System.out.println("for i:" + i++ + ", bufferedValue: " + bufferedValue);
-                var setter = comp.value0;
-                var type = comp.value2;
-                if (type == Type.EXCEPTION_HANDLER) {
-                    exceptionHandler = setter;
-                    continue;
-                }
-                var validator = comp.value1;
+            var setter = comp.value0;
+            var validator = comp.value1;
+            var type = comp.value2;
 //            System.out.println("setter:" + (setter == null ? "null" : "exists") + ", validator:" + (validator == null ? "null" : "exists") + ", validatorIsStopper:" + (validatorIsStopper == null ? "null" : "exists"));
-                if (validator == null) {
+            if (validator == null) {
 //                System.out.println("validator == null, set");
-                    bufferedValue = setter.compile(bufferedValue);
-                    continue;
-                }
-                if (!validator.validate(bufferedValue)) {
+                bufferedValue = setter.compile(bufferedValue);
+                continue;
+            }
+            if (!validator.validate(bufferedValue)) {
 //                System.out.println("!validator.validate(bufferedValue)");
-                    continue;
-                }
-                if (setter != null) {
+                continue;
+            }
+            if (setter != null) {
 //                System.out.println("setter != null");
-                    bufferedValue = setter.compile(bufferedValue);
-                }
-                if (type == Type.STOPPER) {
+                bufferedValue = setter.compile(bufferedValue);
+            }
+            if (type == Type.STOPPER) {
 //                System.out.println("validatorIsStopper == true");
-                    return bufferedValue;
-                }
+                return bufferedValue;
+            }
 //            System.out.println("fin");
-            }
-            return bufferedValue;
-        } catch (Exception e) {
-            if (exceptionHandler != null) {
-                return exceptionHandler.compile(bufferedValue);
-            }
-            return TGS_UnSafe.catchMeIfUCanReturns(e);
         }
+        return bufferedValue;
     }
-
 }
