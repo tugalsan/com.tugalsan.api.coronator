@@ -40,7 +40,7 @@ public class TGS_Coronator<T> {
     }
 
     //LOADERS
-    private List<TGS_Pack3<TGS_CompilerType1<T, T>, TGS_ValidatorType1<T>, Type>> pack = new ArrayList();
+    private final List<TGS_Pack3<TGS_CompilerType1<T, T>, TGS_ValidatorType1<T>, Type>> pack = new ArrayList();
 
     private enum Type {
         SKIPPER, STOPPER
@@ -51,7 +51,7 @@ public class TGS_Coronator<T> {
         return this;
     }
 
-    public TGS_Coronator<T> coronateIf(TGS_ValidatorType1<T> validate, TGS_CompilerType1<T, T> val) {
+    public TGS_Coronator<T> coronateIf(TGS_ValidatorType1<T> validate) {
         pack.add(new TGS_Pack3(null, validate, Type.STOPPER));
         return this;
     }
@@ -69,6 +69,11 @@ public class TGS_Coronator<T> {
     //EXCEPTION HANDLING
     public TGS_Pack2<T, Exception> coronateWithException() {
         return TGS_UnSafe.compile(() -> TGS_Pack2.of(coronate(), null), e -> TGS_Pack2.of(null, e));
+    }
+
+    public T coronateAs(TGS_CompilerType1<T, T> val) {
+        pack.add(new TGS_Pack3(val, null, Type.STOPPER));
+        return coronate();
     }
 
 //FETCHER
