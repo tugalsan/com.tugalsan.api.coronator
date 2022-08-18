@@ -83,7 +83,7 @@ public class TGS_Coronator<T> {
     public T coronate() {
         for (var comp : pack) {
             var validator = comp.value1;
-            if (!validator.validate(bufferedValue)) {
+            if (validator != null && !validator.validate(bufferedValue)) {
                 continue;
             }
             var setter = comp.value0;
