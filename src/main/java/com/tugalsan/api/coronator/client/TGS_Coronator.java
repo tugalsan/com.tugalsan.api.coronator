@@ -81,16 +81,16 @@ public class TGS_Coronator<T> {
 
 //FETCHER
     public T coronate() {
-        for (var p : pack) {
-            var validator = p.value1;
-            if (validator != null && !validator.validate(bufferedValue)) {
+        for (var comp : pack) {
+            var validator = comp.value1;
+            if (!validator.validate(bufferedValue)) {
                 continue;
             }
-            var setter = p.value0;
+            var setter = comp.value0;
             if (setter != null) {
                 bufferedValue = setter.compile(bufferedValue);
             }
-            var type = p.value2;
+            var type = comp.value2;
             if (type == Type.STOPPER) {
                 return bufferedValue;
             }
