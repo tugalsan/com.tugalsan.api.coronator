@@ -66,11 +66,14 @@ public class TGS_Coronator<T> {
         return this;
     }
 
-    //EXCEPTION HANDLING
+    //TODO EXCEPTION HANDLING, NOT TESTED
+    @Deprecated
     public TGS_Pack2<T, Exception> coronateWithException() {
         return TGS_UnSafe.compile(() -> TGS_Pack2.of(coronate(), null), e -> TGS_Pack2.of(null, e));
     }
 
+    //TODO NOT TESTED
+    @Deprecated
     public T coronateAs(TGS_CompilerType1<T, T> val) {
         pack.add(new TGS_Pack3(val, null, Type.STOPPER));
         return coronate();
@@ -78,33 +81,19 @@ public class TGS_Coronator<T> {
 
 //FETCHER
     public T coronate() {
-//        System.out.println("pack.size(): " + pack.size());
-//        var i = 0;
-        TGS_CompilerType1<T, T> exceptionHandler = null;
         for (var comp : pack) {
-//            System.out.println("for i:" + i++ + ", bufferedValue: " + bufferedValue);
-            var setter = comp.value0;
             var validator = comp.value1;
-            var type = comp.value2;
-//            System.out.println("setter:" + (setter == null ? "null" : "exists") + ", validator:" + (validator == null ? "null" : "exists") + ", validatorIsStopper:" + (validatorIsStopper == null ? "null" : "exists"));
-            if (validator == null) {
-//                System.out.println("validator == null, set");
-                bufferedValue = setter.compile(bufferedValue);
-                continue;
-            }
             if (!validator.validate(bufferedValue)) {
-//                System.out.println("!validator.validate(bufferedValue)");
                 continue;
             }
+            var setter = comp.value0;
             if (setter != null) {
-//                System.out.println("setter != null");
                 bufferedValue = setter.compile(bufferedValue);
             }
+            var type = comp.value2;
             if (type == Type.STOPPER) {
-//                System.out.println("validatorIsStopper == true");
                 return bufferedValue;
             }
-//            System.out.println("fin");
         }
         return bufferedValue;
     }
