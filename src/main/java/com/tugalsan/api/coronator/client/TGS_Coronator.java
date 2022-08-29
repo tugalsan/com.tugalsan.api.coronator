@@ -39,6 +39,10 @@ public class TGS_Coronator<T> {
         return new TGS_Coronator(null);
     }
 
+    public static TGS_Coronator<Boolean> ofBool() {
+        return new TGS_Coronator(null);
+    }
+
     //LOADERS
     private final List<TGS_Pack3<TGS_CompilerType1<T, T>, TGS_ValidatorType1<T>, Type>> pack = new ArrayList();
 
@@ -72,8 +76,6 @@ public class TGS_Coronator<T> {
         return TGS_UnSafe.compile(() -> TGS_Pack2.of(coronate(), null), e -> TGS_Pack2.of(null, e));
     }
 
-    //TODO NOT TESTED
-    @Deprecated
     public T coronateAs(TGS_CompilerType1<T, T> val) {
         pack.add(new TGS_Pack3(val, null, Type.STOPPER));
         return coronate();
