@@ -70,7 +70,7 @@ public class TGS_Coronator<T> {
         return this;
     }
 
-    //TODO EXCEPTION HANDLING, NOT TESTED
+    //TODO coronateWithException EXCEPTION HANDLING, NOT TESTED
     @Deprecated
     public TGS_Pack2<T, Exception> coronateWithException() {
         return TGS_UnSafe.compile(() -> TGS_Pack2.of(coronate(), null), e -> TGS_Pack2.of(null, e));
