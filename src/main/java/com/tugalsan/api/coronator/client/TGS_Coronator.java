@@ -1,6 +1,6 @@
 package com.tugalsan.api.coronator.client;
 
-import com.tugalsan.api.compiler.client.*;
+import com.tugalsan.api.callable.client.*;
 import com.tugalsan.api.pack.client.*;
 import com.tugalsan.api.unsafe.client.*;
 import com.tugalsan.api.validator.client.*;
@@ -44,13 +44,13 @@ public class TGS_Coronator<T> {
     }
 
     //LOADERS
-    private final List<TGS_Pack3<TGS_CompilerType1<T, T>, TGS_ValidatorType1<T>, Type>> pack = new ArrayList();
+    private final List<TGS_Pack3<TGS_CallableType1<T, T>, TGS_ValidatorType1<T>, Type>> pack = new ArrayList();
 
     private enum Type {
         SKIPPER, STOPPER
     }
 
-    public TGS_Coronator<T> anoint(TGS_CompilerType1<T, T> val) {
+    public TGS_Coronator<T> anoint(TGS_CallableType1<T, T> val) {
         pack.add(new TGS_Pack3(val, null, Type.SKIPPER));
         return this;
     }
@@ -60,12 +60,12 @@ public class TGS_Coronator<T> {
         return this;
     }
 
-    public TGS_Coronator<T> anointIf(TGS_ValidatorType1<T> validate, TGS_CompilerType1<T, T> val) {
+    public TGS_Coronator<T> anointIf(TGS_ValidatorType1<T> validate, TGS_CallableType1<T, T> val) {
         pack.add(new TGS_Pack3(val, validate, Type.SKIPPER));
         return this;
     }
 
-    public TGS_Coronator<T> anointAndCoronateIf(TGS_ValidatorType1<T> validate, TGS_CompilerType1<T, T> val) {
+    public TGS_Coronator<T> anointAndCoronateIf(TGS_ValidatorType1<T> validate, TGS_CallableType1<T, T> val) {
         pack.add(new TGS_Pack3(val, validate, Type.STOPPER));
         return this;
     }
@@ -73,10 +73,10 @@ public class TGS_Coronator<T> {
     //TODO coronateWithException EXCEPTION HANDLING, NOT TESTED
     @Deprecated
     public TGS_Pack2<T, Exception> coronateWithException() {
-        return TGS_UnSafe.compile(() -> TGS_Pack2.of(coronate(), null), e -> TGS_Pack2.of(null, e));
+        return TGS_UnSafe.call(() -> TGS_Pack2.of(coronate(), null), e -> TGS_Pack2.of(null, e));
     }
 
-    public T coronateAs(TGS_CompilerType1<T, T> val) {
+    public T coronateAs(TGS_CallableType1<T, T> val) {
         pack.add(new TGS_Pack3(val, null, Type.STOPPER));
         return coronate();
     }
@@ -90,7 +90,7 @@ public class TGS_Coronator<T> {
             }
             var setter = comp.value0;
             if (setter != null) {
-                bufferedValue = setter.compile(bufferedValue);
+                bufferedValue = setter.call(bufferedValue);
             }
             var type = comp.value2;
             if (type == Type.STOPPER) {
