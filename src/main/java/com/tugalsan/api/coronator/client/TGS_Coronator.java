@@ -1,7 +1,7 @@
 package com.tugalsan.api.coronator.client;
 
 import com.tugalsan.api.callable.client.*;
-import com.tugalsan.api.pack.client.*;
+import com.tugalsan.api.tuple.client.*;
 import com.tugalsan.api.unsafe.client.*;
 import com.tugalsan.api.validator.client.*;
 import java.util.*;
@@ -44,40 +44,40 @@ public class TGS_Coronator<T> {
     }
 
     //LOADERS
-    private final List<TGS_Pack3<TGS_CallableType1<T, T>, TGS_ValidatorType1<T>, Type>> pack = new ArrayList();
+    private final List<TGS_Tuple3<TGS_CallableType1<T, T>, TGS_ValidatorType1<T>, Type>> pack = new ArrayList();
 
     private enum Type {
         SKIPPER, STOPPER
     }
 
     public TGS_Coronator<T> anoint(TGS_CallableType1<T, T> val) {
-        pack.add(new TGS_Pack3(val, null, Type.SKIPPER));
+        pack.add(new TGS_Tuple3(val, null, Type.SKIPPER));
         return this;
     }
 
     public TGS_Coronator<T> coronateIf(TGS_ValidatorType1<T> validate) {
-        pack.add(new TGS_Pack3(null, validate, Type.STOPPER));
+        pack.add(new TGS_Tuple3(null, validate, Type.STOPPER));
         return this;
     }
 
     public TGS_Coronator<T> anointIf(TGS_ValidatorType1<T> validate, TGS_CallableType1<T, T> val) {
-        pack.add(new TGS_Pack3(val, validate, Type.SKIPPER));
+        pack.add(new TGS_Tuple3(val, validate, Type.SKIPPER));
         return this;
     }
 
     public TGS_Coronator<T> anointAndCoronateIf(TGS_ValidatorType1<T> validate, TGS_CallableType1<T, T> val) {
-        pack.add(new TGS_Pack3(val, validate, Type.STOPPER));
+        pack.add(new TGS_Tuple3(val, validate, Type.STOPPER));
         return this;
     }
 
     //TODO coronateWithException EXCEPTION HANDLING, NOT TESTED
     @Deprecated
-    public TGS_Pack2<T, Exception> coronateWithException() {
-        return TGS_UnSafe.call(() -> TGS_Pack2.of(coronate(), null), e -> TGS_Pack2.of(null, e));
+    public TGS_Tuple2<T, Exception> coronateWithException() {
+        return TGS_UnSafe.call(() -> TGS_Tuple2.of(coronate(), null), e -> TGS_Tuple2.of(null, e));
     }
 
     public T coronateAs(TGS_CallableType1<T, T> val) {
-        pack.add(new TGS_Pack3(val, null, Type.STOPPER));
+        pack.add(new TGS_Tuple3(val, null, Type.STOPPER));
         return coronate();
     }
 
