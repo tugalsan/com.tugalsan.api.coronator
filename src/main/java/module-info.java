@@ -1,5 +1,4 @@
 module com.tugalsan.api.coronator {
-    requires gwt.user;
     requires com.tugalsan.api.callable;
     requires com.tugalsan.api.runnable;
     requires com.tugalsan.api.validator;
